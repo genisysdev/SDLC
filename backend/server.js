@@ -23,7 +23,11 @@ app.get('/', (req, res) => {
   res.send('MERN Auth Backend is running!');
 });
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// Start the server only if not being imported by another module (e.g., for testing)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app; // Export app for testing
