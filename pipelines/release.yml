@@ -1,0 +1,28 @@
+trigger:
+- none
+
+pr:
+- none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: Deploy
+  displayName: 'Deploy to Azure App Service'
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy Node.js App'
+    steps:
+    - download: current
+      artifact: drop
+      displayName: 'Download Build Artifact'
+
+    - task: AzureWebApp@1
+      inputs:
+        azureSubscription: '<YOUR_AZURE_SERVICE_CONNECTION>'
+        appType: 'webAppLinux'
+        appName: '<YOUR_APP_SERVICE_NAME>'
+        package: '$(Pipeline.Workspace)/drop/$(Build.BuildId).zip'
+        runtimeStack: 'NODE|16-lts'
+      displayName: 'Deploy to Azure App Service'
